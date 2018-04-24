@@ -29,14 +29,16 @@ public final class Main extends Application {
     private TextField endNumField;
     private Label numOfColsLabel;
     private TextField numOfColsField;
+    private Label fileNameLabel;
+    private TextField fileNameField;
     private File selectedDirectory;
     private TextArea textArea;
     private TextArea currentDirectoryField;
-    private static final String FILE_NAME = "generated-numbers.tsv";
+    private static final String FILE_EXT = ".tsv";
 
     @Override
     public void start(final Stage stage) {
-        stage.setTitle("File Chooser Sample");
+        stage.setTitle("SwiftPrint Number Generator");
 
         final DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select a Folder");
@@ -53,12 +55,12 @@ public final class Main extends Application {
             }else{
                 currentDirectoryField.setText("Not a valid folder...");
             }
-            generateButton.setDisable(file == null);
+            generateButton.setDisable(file == null || fileNameField.getCharacters().toString().isEmpty());
         });
 
         generateButton.setOnAction( (e) ->{
             textArea.appendText("==================================\n");
-            String filePath = this.selectedDirectory.getPath() + File.separator + FILE_NAME;
+            String filePath = this.selectedDirectory.getPath() + File.separator + fileNameField.getCharacters().toString().trim() + FILE_EXT;
             generateFile(filePath);
         });
 
@@ -83,6 +85,12 @@ public final class Main extends Application {
         endNumField.setTextFormatter(new TextFormatter<>(new NumberStringConverter()));
         GridPane.setConstraints(numOfColsLabel, 0, 2);
         GridPane.setConstraints(numOfColsField, 1, 2);
+        
+        fileNameLabel = new Label("Filename: ");
+        fileNameField = new TextField();
+        
+        GridPane.setConstraints(fileNameLabel, 0, 3);
+        GridPane.setConstraints(fileNameField, 1, 3);
 
         textArea = new TextArea();
         textArea.setWrapText(true);
@@ -93,14 +101,17 @@ public final class Main extends Application {
         currentDirectoryField.setMaxSize(200, 40);
         currentDirectoryField.setMinSize(200, 40);
 
-        GridPane.setConstraints(folderButton, 0, 3);
-        GridPane.setConstraints(currentDirectoryField, 1 , 3);
-        GridPane.setConstraints(generateButton, 0, 4);
-        GridPane.setConstraints(textArea, 0, 5);
-        GridPane.setConstraints(clearButton, 1, 5);
+        GridPane.setConstraints(folderButton, 0, 4);
+        GridPane.setConstraints(currentDirectoryField, 1 , 4);
+        GridPane.setConstraints(generateButton, 0, 5);
+        GridPane.setConstraints(textArea, 0, 6);
+        GridPane.setConstraints(clearButton, 1, 6);
         inputGridPane.setHgap(6);
         inputGridPane.setVgap(6);
-        inputGridPane.getChildren().addAll(folderButton, generateButton, clearButton, currentDirectoryField, textArea, startNumLabel, startNumField, endNumLabel, endNumField, numOfColsLabel, numOfColsField);
+        inputGridPane.getChildren().addAll(folderButton, generateButton, clearButton, 
+        								   currentDirectoryField, textArea, startNumLabel, 
+        								   startNumField, endNumLabel, endNumField, 
+        								   numOfColsLabel, numOfColsField, fileNameField, fileNameLabel);
 
         final Pane rootGroup = new VBox(12);
         rootGroup.getChildren().addAll(inputGridPane);
