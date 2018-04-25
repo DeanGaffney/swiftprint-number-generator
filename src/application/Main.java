@@ -59,7 +59,8 @@ public final class Main extends Application {
         });
 
         generateButton.setOnAction( (e) ->{
-            textArea.appendText("==================================\n");
+            textArea.clear();
+            textArea.appendText("Generating file...\n");
             String filePath = this.selectedDirectory.getPath() + File.separator + fileNameField.getCharacters().toString().trim() + FILE_EXT;
             generateFile(filePath);
         });
@@ -125,10 +126,18 @@ public final class Main extends Application {
         Application.launch(args);
     }
 
+    /**
+     * Sets the directory to save the generated file
+     * @param file - the directory to save the generated file
+     */
     private void setFileSaveDriectory(File file){
         this.selectedDirectory = file;
     }
 
+    /**
+     * Generates a tsv file
+     * @param filePath - the file path to use when creating the tsv file
+     */
     private void generateFile(String filePath) {
         String[][] transposedMatrix = createMatrix();
         PrintWriter printWriter = null;
@@ -155,8 +164,11 @@ public final class Main extends Application {
         }
     }
 
+    /**
+     * Creates a matrix of all values needed for the tsv file
+     * @return String [][] - a 2d array representing a matrix of all the values required for the tsv file
+     */
     private String[][] createMatrix(){
-        textArea.appendText("Creating matrix...\n");
         List<List<String>> matrix = new ArrayList<List<String>>();
         String[][] transposedMatrix = null;
         try{
@@ -181,7 +193,6 @@ public final class Main extends Application {
             }
 
             if(!colValues.isEmpty())matrix.add(colValues);
-            textArea.appendText("Matrix created...\n");
             transposedMatrix = transpose(matrix);
         }catch(NumberFormatException e) {
             textArea.appendText("Error occurred while reading inputs....\nMake sure your values are not empty and are valid numbers...\n");
@@ -191,8 +202,13 @@ public final class Main extends Application {
         return transposedMatrix;
     }
 
+    /**
+     * Transposes a matrix of values
+     * @param matrix - the matrix to transpose
+     * @return String [][] - the transposed matrix represented as a 2d array
+     * @throws Exception
+     */
     private String [][] transpose(List<List<String>> matrix) throws Exception{
-        textArea.appendText("Transposing matrix...\n");
         String [][] transposedMatrix = new String [matrix.get(0).size()][matrix.size()];
         for(int i = 0; i < matrix.size(); i++){
             for(int j = 0; j < matrix.get(0).size(); j++){
@@ -203,7 +219,6 @@ public final class Main extends Application {
                 }
             }
         }
-        textArea.appendText("Transposing matrix complete...\n");
         return transposedMatrix;
     }
 }
