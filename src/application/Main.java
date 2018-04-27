@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -34,7 +36,7 @@ public final class Main extends Application {
     private File selectedDirectory;
     private TextArea textArea;
     private TextArea currentDirectoryField;
-    private static final String FILE_EXT = ".tsv";
+    private static final String FILE_EXT = ".csv";
 
     @Override
     public void start(final Stage stage) {
@@ -144,11 +146,12 @@ public final class Main extends Application {
         try {
             printWriter = new PrintWriter(new FileWriter(filePath));
             for (int i = 0; i < transposedMatrix.length; i++) {
-                String str = "";
+                List<String> values = new ArrayList<String>();
                 for (int j = 0; j < transposedMatrix[i].length; j++) {
-                    str += transposedMatrix[i][j] + "\t";
+                    values.add(transposedMatrix[i][j]);
                 }
-                printWriter.write(str + "\n");
+                String line = values.stream().collect(Collectors.joining(","));
+                printWriter.write(line + "\n");
             }
             textArea.appendText("Completed! Your file can be found at " + filePath + "\n");
         } catch (IOException e) {
