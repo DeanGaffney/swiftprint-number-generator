@@ -57,14 +57,18 @@ public final class Main extends Application {
             }else{
                 currentDirectoryField.setText("Not a valid folder...");
             }
-            generateButton.setDisable(file == null || fileNameField.getCharacters().toString().isEmpty());
+            generateButton.setDisable(file == null);
         });
 
         generateButton.setOnAction( (e) ->{
-            textArea.clear();
-            textArea.appendText("Generating file...\n");
-            String filePath = this.selectedDirectory.getPath() + File.separator + fileNameField.getCharacters().toString().trim() + FILE_EXT;
-            generateFile(filePath);
+        	if(fileNameField.getCharacters().toString().isEmpty()) {
+        		textArea.appendText("You have not inputted a file name...");
+        	}else {
+        		textArea.clear();
+                textArea.appendText("Generating file...\n");
+                String filePath = this.selectedDirectory.getPath() + File.separator + fileNameField.getCharacters().toString().trim() + FILE_EXT;
+                generateFile(filePath);
+        	}
         });
 
         clearButton.setOnAction((e) -> textArea.clear());
