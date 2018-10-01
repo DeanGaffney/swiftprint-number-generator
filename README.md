@@ -1,11 +1,13 @@
 # SwiftPrint Number Generator
 
 ## Installation
-- On this repository page go to 'build/jfx/app/'.
-- Inside this folder you will find 'swiftprint-number-generator.jar' download this file and place it where you want on your device.
+- Download the latest 'swiftprint-number-generator.jar' from the releases tab.
+- Place this file where you want on your device.
 - Try double clicking the file to run it.
 - If you are on Mac OSX you may need to make the file executable, to do this open the terminal and navigate to the 'swiftprint-number-generator.jar' file. Then run the following command: 
-- `chmod +x swiftprint-number-generator.jar`
+  ```bash
+    chmod +x swiftprint-number-generator.jar
+  ```
 - Try double clicking the 'swiftprint-number-generator.jar' file again.
 
 ## Usage
