@@ -5,10 +5,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javafx.application.Application;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -16,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -27,16 +31,26 @@ public final class Main extends Application {
 
     private Label startNumLabel;
     private TextField startNumField;
+    
     private Label endNumLabel;
     private TextField endNumField;
+    
     private Label numOfColsLabel;
     private TextField numOfColsField;
+    
     private Label fileNameLabel;
     private TextField fileNameField;
+    
     private File selectedDirectory;
     private TextArea textArea;
+    
     private TextArea currentDirectoryField;
-    private static final String FILE_EXT = ".csv";
+    private String fileExt;
+    
+    private Label fileTypeChoiceBoxLabel;
+    private ChoiceBox<String> fileTypeChoiceBox;
+
+    private static final List<String> FILE_EXTENSIONS = Arrays.asList(".csv", ".tsv");
 
     @Override
     public void start(final Stage stage) {
@@ -66,7 +80,7 @@ public final class Main extends Application {
         	}else {
         		textArea.clear();
                 textArea.appendText("Generating file...\n");
-                String filePath = this.selectedDirectory.getPath() + File.separator + fileNameField.getCharacters().toString().trim() + FILE_EXT;
+                String filePath = this.selectedDirectory.getPath() + File.separator + fileNameField.getCharacters().toString().trim() + getFileExt();
                 generateFile(filePath);
         	}
         });
@@ -98,7 +112,16 @@ public final class Main extends Application {
         
         GridPane.setConstraints(fileNameLabel, 0, 3);
         GridPane.setConstraints(fileNameField, 1, 3);
-
+        
+        fileTypeChoiceBoxLabel = new Label("File Type: ");
+        this.fileTypeChoiceBox = new ChoiceBox<String>(FXCollections.observableArrayList(FILE_EXTENSIONS));
+        this.fileTypeChoiceBox.getSelectionModel()
+          .selectedItemProperty()
+          .addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> setFileExt(newValue));
+        this.fileTypeChoiceBox.getSelectionModel().select(FILE_EXTENSIONS.get(0));
+        GridPane.setConstraints(fileTypeChoiceBoxLabel, 2, 3);
+        GridPane.setConstraints(fileTypeChoiceBox, 3, 3);
+        
         textArea = new TextArea();
         textArea.setWrapText(true);
         textArea.setMaxSize(200, 100);
@@ -118,7 +141,8 @@ public final class Main extends Application {
         inputGridPane.getChildren().addAll(folderButton, generateButton, clearButton, 
         								   currentDirectoryField, textArea, startNumLabel, 
         								   startNumField, endNumLabel, endNumField, 
-        								   numOfColsLabel, numOfColsField, fileNameField, fileNameLabel);
+                                           numOfColsLabel, numOfColsField, fileNameField, fileNameLabel,
+                                           fileTypeChoiceBox);
 
         final Pane rootGroup = new VBox(12);
         rootGroup.getChildren().addAll(inputGridPane);
@@ -154,7 +178,7 @@ public final class Main extends Application {
                 for (int j = 0; j < transposedMatrix[i].length; j++) {
                     values.add(transposedMatrix[i][j]);
                 }
-                String line = values.stream().collect(Collectors.joining(","));
+                String line = values.stream().collect(Collectors.joining((getFileExt() == FILE_EXTENSIONS.get(0)) ? "," : "\t"));
                 printWriter.write(line + "\n");
             }
             textArea.appendText("Completed! Your file can be found at " + filePath + "\n");
@@ -227,5 +251,19 @@ public final class Main extends Application {
             }
         }
         return transposedMatrix;
+    }
+
+    /**
+     * @return the fileExt
+     */
+    public String getFileExt() {
+        return fileExt;
+    }
+
+    /**
+     * @param fileExt the fileExt to set
+     */
+    public void setFileExt(String fileExt) {
+        this.fileExt = fileExt;
     }
 }
