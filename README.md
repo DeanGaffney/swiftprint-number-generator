@@ -14,7 +14,8 @@
 - Specify your starting number.
 - Specify your ending number.
 - Specify the number of columns you need.
-- Specify the name of the file with no extension. Eg. Enter 'numbers' as the name rather than 'numbers.txt'. The application will handle the '.csv' file extension associated with comma separated files.
+- Specify the name of the file with no extension. Eg. Enter 'numbers' as the name rather than 'numbers.txt'.
+- Select the file type you want '.csv' or '.tsv'
 - Click the 'Select a folder' button and choose where you want the generated file to be saved. Your selected folder will be displayed in the app once chosen.
 - Click the 'Generate!' button to generate your file.
 - A messages will appear in the text area at the bottom of the application. This text area will let you know when the file has been created and where you can find it and it will also tell you if something has went wrong.
