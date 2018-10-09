@@ -1,5 +1,9 @@
 package files;
 
+/**
+ * FileType enum for representing the different file types supported 
+ * by the application
+ */
 public enum FileType {
 
 	CSV("csv", ","), 
