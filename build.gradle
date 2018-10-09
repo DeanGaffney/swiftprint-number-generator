@@ -1,3 +1,5 @@
+import org.gradle.plugins.ide.eclipse.model.AccessRule
+
 buildscript {
     dependencies {
         classpath group: 'de.dynamicfiles.projects.gradle.plugins', name: 'javafx-gradle-plugin', version: '8.8.2'
@@ -9,6 +11,18 @@ buildscript {
     }
 }
 apply plugin: 'java'
+apply plugin: 'eclipse'
+
+eclipse {
+    classpath {
+        file {
+            whenMerged {
+                def jre = entries.find { it.path.contains 'org.eclipse.jdt.launching.JRE_CONTAINER' }
+                jre.accessRules.add(new AccessRule('0', 'javafx/**'))
+            }
+        }
+    }
+}
 
 version '1.1.0'
 
@@ -20,6 +34,7 @@ repositories {
 apply plugin: 'javafx-gradle-plugin'
 
 sourceSets.main.java.srcDirs = ['src']
+sourceSets.test.java.srcDirs = ['test']
 
 jfx {
     // minimal requirement for jfxJar-task
@@ -30,4 +45,8 @@ jfx {
     
     // minimal requirement for jfxNative-task
     vendor = 'Dean Gaffney'
+}
+
+dependencies{
+    testCompile 'junit:junit:4.12'
 }
